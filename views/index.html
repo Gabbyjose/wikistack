@@ -10,5 +10,11 @@
         <a href="/wiki/{{page.dataValues.urlTitle}}">{{page.dataValues.title}}</a>
       </li>
       {% endfor %}
+      {% for user in users %}
+      <li>
+        <a href="/users/{{user.dataValues.name}}">{{user.dataValues.name}}</a>
+      </li>
+      {% endfor %}
+
   </ul>
 {% endblock %}

@@ -24,24 +24,33 @@ const Page = db.define('page', {
   date: {
     type: Sequelize.DATE,
     defaultValue: Sequelize.NOW
+  }
+}, {
+  hooks: {
+    beforeValidate: function(page) {
+      if (!page.title){
+        page.urlTitle = Math.random().toString(36).substring(2, 12);
+      }
+      else {
+        page.urlTitle = page.title.replace(/\s+/g, '_').replace(/\W/g, '').toLowerCase();
+      }
+    }
   },
-  route: {
-    type: Sequelize.STRING,
-    get(){
-      let URL = this.getDataValue('urlTitle');
-      return '/wiki/'+ URL;
+  getterMethods: {
+    route: function() {
+      return '/wiki/' + this.urlTitle;
     }
   }
 });
 
-Page.hook('beforeValidate', function(page) {
-  if (!page.title){
-    page.urlTitle = Math.random().toString(36).substring(2, 12);
-  }
-  else {
-    page.urlTitle = page.title.replace(/\s+/g, '_').replace(/\W/g, '').toLowerCase();
-  }
-});
+// Page.hook('beforeValidate', function(page) {
+//   if (!page.title){
+//     page.urlTitle = Math.random().toString(36).substring(2, 12);
+//   }
+//   else {
+//     page.urlTitle = page.title.replace(/\s+/g, '_').replace(/\W/g, '').toLowerCase();
+//   }
+// });
 
 const User = db.define('user', {
   name: {
